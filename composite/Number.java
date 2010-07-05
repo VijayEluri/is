@@ -16,16 +16,4 @@ public class Number extends Expression
 	{
 		return value;
 	}
-
-	public void accept (Visitor visitor)
-	{
-		visitor.visit (this);
-	}
-
-	public boolean equals (Object expression)
-	{
-		if (!(expression instanceof Number))
-			return false;
-		return ((Number)expression).value == value;
-	}
 }
