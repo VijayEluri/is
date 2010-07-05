@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Observable;
@@ -12,7 +11,6 @@ import java.util.Properties;
 
 import ecv.composite.Expression;
 import ecv.composite.ExpressionBuilder;
-import ecv.composite.Lexer;
 import ecv.composite.Parser;
 import ecv.composite.StreamTokenizerAdapter;
 import ecv.visitor.Context;
@@ -96,10 +94,9 @@ public class Model extends Observable
 	public void parse (String expression) throws IOException
 	{
 		StringReader reader = new StringReader (expression);
-		StreamTokenizer st = new StreamTokenizer (reader);
-		Lexer lexer = new StreamTokenizerAdapter (st);
+		StreamTokenizerAdapter sta = new StreamTokenizerAdapter (reader);
 		ExpressionBuilder builder = new ExpressionBuilder ();
-		Parser parser = new Parser (lexer, builder);
+		Parser parser = new Parser (sta, builder);
 		parser.parse ();
 		this.expression = builder.getResult ();
 		setChanged ();

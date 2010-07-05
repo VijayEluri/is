@@ -1,14 +1,12 @@
 package ecv.visitor;
 
 import java.io.Reader;
-import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Set;
 
-import ecv.composite.Lexer;
 import ecv.composite.StreamTokenizerAdapter;
 
 public class PropertiesContext implements Context
@@ -26,10 +24,10 @@ public class PropertiesContext implements Context
 			// Key validation
 			String key = (String)e.nextElement();
 			Reader reader = new StringReader (key);
-			Lexer lexer = new StreamTokenizerAdapter (new StreamTokenizer (reader));
+			StreamTokenizerAdapter sta = new StreamTokenizerAdapter (reader);
 			try
 			{
-				if (lexer.nextToken () != Lexer.TokenType.TOKEN_ID)
+				if (sta.nextTokenType () != StreamTokenizerAdapter.TokenType.TOKEN_ID)
 					throw new RuntimeException ("Invalid property name '"+key+"' is not a valid identifier");
 			}
 			catch (Exception ex)

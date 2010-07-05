@@ -1,78 +1,95 @@
 package ecv.composite;
-import static ecv.composite.Lexer.TokenType.TOKEN_AND;
-import static ecv.composite.Lexer.TokenType.TOKEN_CPAR;
-import static ecv.composite.Lexer.TokenType.TOKEN_CSB;
-import static ecv.composite.Lexer.TokenType.TOKEN_DIV;
-import static ecv.composite.Lexer.TokenType.TOKEN_EOF;
-import static ecv.composite.Lexer.TokenType.TOKEN_EQ;
-import static ecv.composite.Lexer.TokenType.TOKEN_GE;
-import static ecv.composite.Lexer.TokenType.TOKEN_GT;
-import static ecv.composite.Lexer.TokenType.TOKEN_ID;
-import static ecv.composite.Lexer.TokenType.TOKEN_LE;
-import static ecv.composite.Lexer.TokenType.TOKEN_LT;
-import static ecv.composite.Lexer.TokenType.TOKEN_SUB;
-import static ecv.composite.Lexer.TokenType.TOKEN_MUL;
-import static ecv.composite.Lexer.TokenType.TOKEN_NE;
-import static ecv.composite.Lexer.TokenType.TOKEN_NOT;
-import static ecv.composite.Lexer.TokenType.TOKEN_NUM;
-import static ecv.composite.Lexer.TokenType.TOKEN_OPAR;
-import static ecv.composite.Lexer.TokenType.TOKEN_OSB;
-import static ecv.composite.Lexer.TokenType.TOKEN_OR;
-import static ecv.composite.Lexer.TokenType.TOKEN_ADD;
-import static ecv.composite.Lexer.TokenType.TOKEN_POW;
-import static ecv.composite.Lexer.TokenType.TOKEN_MOD;
+import static ecv.composite.StreamTokenizerAdapter.TokenType.*;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StreamTokenizer;
 
-public class StreamTokenizerAdapter implements Lexer
+public class StreamTokenizerAdapter extends StreamTokenizer
 {
-	private StreamTokenizer streamTokenizer;
 	private TokenType lastToken;
 	private String tokenContent;
+
+	public static enum TokenType
+	{
+		TOKEN_EOF ("end of file"),
+		TOKEN_ID ("identifier"), // ("A" | ... | "Z" | "a" | ...| "z") [("A"| ... | "Z" | "a" | ...| "z" | "0" | ... | "9")]*
+		TOKEN_NUM ("number"), // ("0" | ... | "9") [("0" | ... | "9")]*
+		TOKEN_OPAR ("("), // "("
+		TOKEN_CPAR (")"), // ")"
+		TOKEN_OSB ("["), // "["
+		TOKEN_CSB ("]"), // "]"
+		TOKEN_EQ ("=="), // "=="
+		TOKEN_NE ("!="), // "!="
+		TOKEN_GT (">"), // ">"
+		TOKEN_GE (">="), // ">="
+		TOKEN_LT ("<"), // "<"
+		TOKEN_LE ("<="), // "<="
+		TOKEN_POW ("^"), // "^"
+		TOKEN_DIV ("/"), // "/"
+		TOKEN_MOD ("%"), // "%"
+		TOKEN_MUL ("*"), // "*"
+		TOKEN_SUB ("-"), // "-"
+		TOKEN_ADD ("+"), // "+"
+		TOKEN_AND ("and (&&)"), // "and" o "&&"
+		TOKEN_OR ("or (||)"), // "or" o "||"
+		TOKEN_NOT ("not (!)"); // "not" o "!"
+
+		private final String name;
+		private TokenType (String name)
+		{
+			this.name = name;
+		}
+
+		public String toString ()
+		{
+			return name;
+		}
+
+	}
 
 	/*
 	 * The constructor will adapt the settings of the given StreamTokenizer to
 	 * fit the ECV specification.
 	 */
-	public StreamTokenizerAdapter (StreamTokenizer streamTokenizer)
+	public StreamTokenizerAdapter(Reader r)
 	{
-		this.streamTokenizer = streamTokenizer;
-		streamTokenizer.resetSyntax ();
-		streamTokenizer.eolIsSignificant (false);
-		streamTokenizer.lowerCaseMode (false);
-		streamTokenizer.parseNumbers ();
-		streamTokenizer.ordinaryChar ('(');
-		streamTokenizer.ordinaryChar (')');
-		streamTokenizer.ordinaryChar ('[');
-		streamTokenizer.ordinaryChar (']');
-		streamTokenizer.ordinaryChar ('!');
-		streamTokenizer.ordinaryChar ('=');
-		streamTokenizer.ordinaryChar ('<');
-		streamTokenizer.ordinaryChar ('>');
-		streamTokenizer.ordinaryChar ('^');
-		streamTokenizer.ordinaryChar ('*');
-		streamTokenizer.ordinaryChar ('/');
-		streamTokenizer.ordinaryChar ('%');
-		streamTokenizer.ordinaryChar ('-');
-		streamTokenizer.ordinaryChar ('+');
-		streamTokenizer.wordChars ('a', 'z');
-		streamTokenizer.wordChars ('A', 'Z');
-		streamTokenizer.whitespaceChars ('\0', ' ');
+		super(r);
+		resetSyntax ();
+		eolIsSignificant (false);
+		lowerCaseMode (false);
+		parseNumbers ();
+		ordinaryChar ('(');
+		ordinaryChar (')');
+		ordinaryChar ('[');
+		ordinaryChar (']');
+		ordinaryChar ('!');
+		ordinaryChar ('=');
+		ordinaryChar ('<');
+		ordinaryChar ('>');
+		ordinaryChar ('^');
+		ordinaryChar ('*');
+		ordinaryChar ('/');
+		ordinaryChar ('%');
+		ordinaryChar ('-');
+		ordinaryChar ('+');
+		wordChars ('a', 'z');
+		wordChars ('A', 'Z');
+		whitespaceChars ('\0', ' ');
 	}
 
-	public TokenType nextToken () throws IOException
+	public TokenType nextTokenType () throws IOException
 	{
-		switch (streamTokenizer.nextToken ())
+		switch (nextToken ())
 		{
-		case StreamTokenizer.TT_EOF:
+		case TT_EOF:
 			lastToken = TOKEN_EOF;
 			break;
-		case StreamTokenizer.TT_NUMBER:
+		case TT_NUMBER:
 			lastToken = TOKEN_NUM;
 			break;
-		case StreamTokenizer.TT_WORD:
-			String s = streamTokenizer.sval;
+		case TT_WORD:
+			String s = sval;
 			if (s.equals ("and"))
 				lastToken = TOKEN_AND;
 			else if (s.equals ("or"))
@@ -96,32 +113,32 @@ public class StreamTokenizerAdapter implements Lexer
 			lastToken = TOKEN_CSB;
 			break;
 		case '=':
-			if (streamTokenizer.nextToken () != '=')
+			if (nextToken () != '=')
 				throw new InvalidExpressionError ("Invalid character =. Expected ==");
 			lastToken = TOKEN_EQ;
 			break;
 		case '!':
-			if (streamTokenizer.nextToken () != '=')
+			if (nextToken () != '=')
 			{
-				streamTokenizer.pushBack ();
+				pushBack ();
 				lastToken = TOKEN_NOT;
 			}
 			else
 				lastToken = TOKEN_NE;
 			break;
 		case '>':
-			if (streamTokenizer.nextToken () != '=')
+			if (nextToken () != '=')
 			{
-				streamTokenizer.pushBack ();
+				pushBack ();
 				lastToken = TOKEN_GT;
 			}
 			else
 				lastToken = TOKEN_GE;
 			break;
 		case '<':
-			if (streamTokenizer.nextToken () != '=')
+			if (nextToken () != '=')
 			{
-				streamTokenizer.pushBack ();
+				pushBack ();
 				lastToken = TOKEN_LT;
 			}
 			else
@@ -146,17 +163,17 @@ public class StreamTokenizerAdapter implements Lexer
 			lastToken = TOKEN_ADD;
 			break;
 		case '&':
-			if (streamTokenizer.nextToken () != '&')
+			if (nextToken () != '&')
 				throw new InvalidExpressionError ("Invalid character &. Expected &&");
 			lastToken = TOKEN_AND;
 			break;
 		case '|':
-			if (streamTokenizer.nextToken () != '|')
+			if (nextToken () != '|')
 				throw new InvalidExpressionError ("Invalid character |. Expected ||");
 			lastToken = TOKEN_OR;
 			break;
 		default:
-			throw new InvalidExpressionError ("Unexpected character: "+(char)streamTokenizer.ttype);
+			throw new InvalidExpressionError ("Unexpected character: "+(char)ttype);
 		}
 		return lastToken;
 	}
@@ -166,7 +183,7 @@ public class StreamTokenizerAdapter implements Lexer
 	 */
 	public TokenType lastToken ()
 	{
-		assert streamTokenizer.ttype != -4;
+		assert ttype != -4;
 		return lastToken;
 	}
 
@@ -176,7 +193,7 @@ public class StreamTokenizerAdapter implements Lexer
 	public String getString ()
 	{
 		assert lastToken == TOKEN_ID;
-		return streamTokenizer.sval;
+		return sval;
 	}
 
 	/*
@@ -185,7 +202,7 @@ public class StreamTokenizerAdapter implements Lexer
 	public int getInt ()
 	{
 		assert lastToken == TOKEN_NUM;
-		return (int)streamTokenizer.nval;
+		return (int)nval;
 	}
 
 	/**

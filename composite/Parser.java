@@ -1,29 +1,29 @@
 package ecv.composite;
 
 import static ecv.composite.ExpressionBuilder.OperatorType.*;
-import static ecv.composite.Lexer.TokenType.*;
+import static ecv.composite.StreamTokenizerAdapter.TokenType.*;
 
 import java.io.IOException;
 
-import ecv.composite.Lexer.TokenType;
+import ecv.composite.StreamTokenizerAdapter.TokenType;
 
 public class Parser
 {
-	private Lexer lexer;
+	private StreamTokenizerAdapter sta;
 	private ExpressionBuilder builder;
 
-	public Parser (Lexer lexer, ExpressionBuilder builder)
+	public Parser (StreamTokenizerAdapter sta, ExpressionBuilder builder)
 	{
-		this.lexer = lexer;
+		this.sta = sta;
 		this.builder = builder;
 	}
 
 	public void parse () throws IOException
 	{
-		lexer.nextToken ();
+		sta.nextTokenType ();
 		cond ();
-		if (lexer.lastToken () != TOKEN_EOF)
-			throw new InvalidExpressionError ("Expected end of expression. Got '"+lexer.lastToken()+"' instead.");
+		if (sta.lastToken () != TOKEN_EOF)
+			throw new InvalidExpressionError ("Expected end of expression. Got '"+sta.lastToken()+"' instead.");
 	}
 
 	@SuppressWarnings("unused")
@@ -63,7 +63,7 @@ public class Parser
 
 	private void cond () throws IOException
 	{
-		switch (lexer.lastToken ())
+		switch (sta.lastToken ())
 		{
 		case TOKEN_NOT:
 		case TOKEN_OPAR:
@@ -76,16 +76,16 @@ public class Parser
 			cond1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void cond1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_OR)
+		if (sta.lastToken() == TOKEN_OR)
 		{
 			builder.buildOperator (OP_OR);
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			termb ();
 			builder.endOperator ();
 			cond1 ();
@@ -94,7 +94,7 @@ public class Parser
 
 	private void termb () throws IOException
 	{
-		switch (lexer.lastToken ())
+		switch (sta.lastToken ())
 		{
 		case TOKEN_NOT:
 		case TOKEN_OPAR:
@@ -107,16 +107,16 @@ public class Parser
 			termb1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void termb1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_AND)
+		if (sta.lastToken() == TOKEN_AND)
 		{
 			builder.buildOperator (OP_AND);
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			factb ();
 			builder.endOperator ();
 			termb1 ();
@@ -125,19 +125,19 @@ public class Parser
 
 	private void factb () throws IOException
 	{
-		switch (lexer.lastToken())
+		switch (sta.lastToken())
 		{
 		case TOKEN_NOT:
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			factb ();
 			builder.buildOperator (OP_NOT);
 			break;
 		case TOKEN_OPAR:
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			cond ();
-			if (lexer.lastToken () != TOKEN_CPAR)
-				throw new InvalidExpressionError ("Expected ). Got '"+lexer.lastToken()+"' instead.");
-			lexer.nextToken ();
+			if (sta.lastToken () != TOKEN_CPAR)
+				throw new InvalidExpressionError ("Expected ). Got '"+sta.lastToken()+"' instead.");
+			sta.nextTokenType ();
 			break;
 		case TOKEN_ADD:
 		case TOKEN_SUB:
@@ -145,7 +145,7 @@ public class Parser
 		case TOKEN_NUM:
 		case TOKEN_OSB:
 			expr ();
-			switch (lexer.lastToken ())
+			switch (sta.lastToken ())
 			{
 			case TOKEN_EQ:
 				builder.buildOperator (OP_EQ);
@@ -166,32 +166,32 @@ public class Parser
 				builder.buildOperator (OP_LE);
 				break;
 			default:
-				throw new InvalidExpressionError ("Expected relational operator (==, !=, >, >=, <, <=). Got '"+lexer.lastToken()+"' instead.");
+				throw new InvalidExpressionError ("Expected relational operator (==, !=, >, >=, <, <=). Got '"+sta.lastToken()+"' instead.");
 			}
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			expr ();
 			builder.endOperator ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [, +, -, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, [, +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void expr () throws IOException
 	{
-		switch (lexer.lastToken ())
+		switch (sta.lastToken ())
 		{
 		case TOKEN_SUB:
 			// 0 - term
 			builder.buildOperand (0);
 			builder.buildOperator (OP_SUB);
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			term ();
 			builder.endOperator ();
 			expr1 ();
 			break;
 		case TOKEN_ADD:
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			term ();
 			expr1 ();
 			break;
@@ -202,19 +202,19 @@ public class Parser
 			expr1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number with sign or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected [, a number with sign or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void expr1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_ADD)
+		if (sta.lastToken() == TOKEN_ADD)
 			builder.buildOperator (OP_ADD);
-		else if (lexer.lastToken() == TOKEN_SUB)
+		else if (sta.lastToken() == TOKEN_SUB)
 			builder.buildOperator (OP_SUB);
 		else
 			return;
-		lexer.nextToken ();
+		sta.nextTokenType ();
 		term ();
 		builder.endOperator ();
 		expr1 ();
@@ -222,7 +222,7 @@ public class Parser
 
 	private void term () throws IOException
 	{
-		switch (lexer.lastToken())
+		switch (sta.lastToken())
 		{
 		case TOKEN_ID:
 		case TOKEN_NUM:
@@ -231,21 +231,21 @@ public class Parser
 			term1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void term1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_MUL)
+		if (sta.lastToken() == TOKEN_MUL)
 			builder.buildOperator (OP_MUL);
-		else if (lexer.lastToken() == TOKEN_DIV)
+		else if (sta.lastToken() == TOKEN_DIV)
 			builder.buildOperator (OP_DIV);
-		else if (lexer.lastToken() == TOKEN_MOD)
+		else if (sta.lastToken() == TOKEN_MOD)
 			builder.buildOperator (OP_MOD);
 		else
 			return;
-		lexer.nextToken ();
+		sta.nextTokenType ();
 		termp ();
 		builder.endOperator ();
 		term1 ();
@@ -253,7 +253,7 @@ public class Parser
 
 	private void termp () throws IOException
 	{
-		switch (lexer.lastToken ())
+		switch (sta.lastToken ())
 		{
 		case TOKEN_ID:
 		case TOKEN_NUM:
@@ -262,15 +262,15 @@ public class Parser
 			termp1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
 	private void termp1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_POW)
+		if (sta.lastToken() == TOKEN_POW)
 		{
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			builder.buildOperator (OP_POW);
 			fact ();
 			builder.endOperator ();
@@ -280,25 +280,25 @@ public class Parser
 
 	private void fact () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_ID)
+		if (sta.lastToken() == TOKEN_ID)
 		{
-			builder.buildOperand (lexer.getString ());
-			lexer.nextToken ();
+			builder.buildOperand (sta.getString ());
+			sta.nextTokenType ();
 		}
-		else if (lexer.lastToken() == TOKEN_NUM)
+		else if (sta.lastToken() == TOKEN_NUM)
 		{
-			builder.buildOperand (lexer.getInt ());
-			lexer.nextToken ();
+			builder.buildOperand (sta.getInt ());
+			sta.nextTokenType ();
 		}
-		else if (lexer.lastToken() == TOKEN_OSB)
+		else if (sta.lastToken() == TOKEN_OSB)
 		{
-			lexer.nextToken ();
+			sta.nextTokenType ();
 			expr ();
-			if (lexer.lastToken () != TOKEN_CSB)
-				throw new InvalidExpressionError ("Expected ]. Got '"+lexer.lastToken()+"' instead.");
-			lexer.nextToken ();
+			if (sta.lastToken () != TOKEN_CSB)
+				throw new InvalidExpressionError ("Expected ]. Got '"+sta.lastToken()+"' instead.");
+			sta.nextTokenType ();
 		}
 		else
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+lexer.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 	}
 }
