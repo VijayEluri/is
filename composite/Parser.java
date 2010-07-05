@@ -32,7 +32,7 @@ public class Parser
 		switch (token)
 		{
 		case TOKEN_EQ:
-		case TOKEN_NEQ:
+		case TOKEN_NE:
 		case TOKEN_LT:
 		case TOKEN_LE:
 		case TOKEN_GT:
@@ -52,13 +52,13 @@ public class Parser
 	@SuppressWarnings("unused")
 	private static boolean isClosing (TokenType token)
 	{
-		return token == TOKEN_CPAR || token == TOKEN_CPAR1 || token == TOKEN_EOF;
+		return token == TOKEN_CPAR || token == TOKEN_CSB || token == TOKEN_EOF;
 	}
 
 	@SuppressWarnings("unused")
 	private static boolean isPlusMinus (TokenType token)
 	{
-		return token == TOKEN_PLUS || token == TOKEN_MINUS;
+		return token == TOKEN_ADD || token == TOKEN_SUB;
 	}
 
 	private void cond () throws IOException
@@ -67,11 +67,11 @@ public class Parser
 		{
 		case TOKEN_NOT:
 		case TOKEN_OPAR:
-		case TOKEN_PLUS:
-		case TOKEN_MINUS:
+		case TOKEN_ADD:
+		case TOKEN_SUB:
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			termb ();
 			cond1 ();
 			break;
@@ -84,7 +84,7 @@ public class Parser
 	{
 		if (lexer.lastToken() == TOKEN_OR)
 		{
-			builder.buildOperator (OPERATOR_OR);
+			builder.buildOperator (OP_OR);
 			lexer.nextToken ();
 			termb ();
 			builder.endOperator ();
@@ -98,11 +98,11 @@ public class Parser
 		{
 		case TOKEN_NOT:
 		case TOKEN_OPAR:
-		case TOKEN_PLUS:
-		case TOKEN_MINUS:
+		case TOKEN_ADD:
+		case TOKEN_SUB:
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			factb ();
 			termb1 ();
 			break;
@@ -115,7 +115,7 @@ public class Parser
 	{
 		if (lexer.lastToken() == TOKEN_AND)
 		{
-			builder.buildOperator (OPERATOR_AND);
+			builder.buildOperator (OP_AND);
 			lexer.nextToken ();
 			factb ();
 			builder.endOperator ();
@@ -130,7 +130,7 @@ public class Parser
 		case TOKEN_NOT:
 			lexer.nextToken ();
 			factb ();
-			builder.buildOperator (OPERATOR_NOT);
+			builder.buildOperator (OP_NOT);
 			break;
 		case TOKEN_OPAR:
 			lexer.nextToken ();
@@ -139,31 +139,31 @@ public class Parser
 				throw new InvalidExpressionError ("Expected ). Got '"+lexer.lastToken()+"' instead.");
 			lexer.nextToken ();
 			break;
-		case TOKEN_PLUS:
-		case TOKEN_MINUS:
+		case TOKEN_ADD:
+		case TOKEN_SUB:
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			expr ();
 			switch (lexer.lastToken ())
 			{
 			case TOKEN_EQ:
-				builder.buildOperator (OPERATOR_EQ);
+				builder.buildOperator (OP_EQ);
 				break;
-			case TOKEN_NEQ:
-				builder.buildOperator (OPERATOR_NEQ);
+			case TOKEN_NE:
+				builder.buildOperator (OP_NE);
 				break;
 			case TOKEN_GT:
-				builder.buildOperator (OPERATOR_GT);
+				builder.buildOperator (OP_GT);
 				break;
 			case TOKEN_GE:
-				builder.buildOperator (OPERATOR_GE);
+				builder.buildOperator (OP_GE);
 				break;
 			case TOKEN_LT:
-				builder.buildOperator (OPERATOR_LT);
+				builder.buildOperator (OP_LT);
 				break;
 			case TOKEN_LE:
-				builder.buildOperator (OPERATOR_LE);
+				builder.buildOperator (OP_LE);
 				break;
 			default:
 				throw new InvalidExpressionError ("Expected relational operator (==, !=, >, >=, <, <=). Got '"+lexer.lastToken()+"' instead.");
@@ -181,23 +181,23 @@ public class Parser
 	{
 		switch (lexer.lastToken ())
 		{
-		case TOKEN_MINUS:
+		case TOKEN_SUB:
 			// 0 - term
 			builder.buildOperand (0);
-			builder.buildOperator (OPERATOR_MINUS);
+			builder.buildOperator (OP_SUB);
 			lexer.nextToken ();
 			term ();
 			builder.endOperator ();
 			expr1 ();
 			break;
-		case TOKEN_PLUS:
+		case TOKEN_ADD:
 			lexer.nextToken ();
 			term ();
 			expr1 ();
 			break;
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			term ();
 			expr1 ();
 			break;
@@ -208,10 +208,10 @@ public class Parser
 
 	private void expr1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_PLUS)
-			builder.buildOperator (OPERATOR_PLUS);
-		else if (lexer.lastToken() == TOKEN_MINUS)
-			builder.buildOperator (OPERATOR_MINUS);
+		if (lexer.lastToken() == TOKEN_ADD)
+			builder.buildOperator (OP_ADD);
+		else if (lexer.lastToken() == TOKEN_SUB)
+			builder.buildOperator (OP_SUB);
 		else
 			return;
 		lexer.nextToken ();
@@ -226,7 +226,7 @@ public class Parser
 		{
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			termp ();
 			term1 ();
 			break;
@@ -237,12 +237,12 @@ public class Parser
 
 	private void term1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_MULT)
-			builder.buildOperator (OPERATOR_MULT);
+		if (lexer.lastToken() == TOKEN_MUL)
+			builder.buildOperator (OP_MUL);
 		else if (lexer.lastToken() == TOKEN_DIV)
-			builder.buildOperator (OPERATOR_DIV);
-		else if (lexer.lastToken() == TOKEN_REM)
-			builder.buildOperator (OPERATOR_REM);
+			builder.buildOperator (OP_DIV);
+		else if (lexer.lastToken() == TOKEN_MOD)
+			builder.buildOperator (OP_MOD);
 		else
 			return;
 		lexer.nextToken ();
@@ -257,7 +257,7 @@ public class Parser
 		{
 		case TOKEN_ID:
 		case TOKEN_NUM:
-		case TOKEN_OPAR1:
+		case TOKEN_OSB:
 			fact ();
 			termp1 ();
 			break;
@@ -268,10 +268,10 @@ public class Parser
 
 	private void termp1 () throws IOException
 	{
-		if (lexer.lastToken() == TOKEN_POWER)
+		if (lexer.lastToken() == TOKEN_POW)
 		{
 			lexer.nextToken ();
-			builder.buildOperator (OPERATOR_POWER);
+			builder.buildOperator (OP_POW);
 			fact ();
 			builder.endOperator ();
 			termp1 ();
@@ -290,11 +290,11 @@ public class Parser
 			builder.buildOperand (lexer.getInt ());
 			lexer.nextToken ();
 		}
-		else if (lexer.lastToken() == TOKEN_OPAR1)
+		else if (lexer.lastToken() == TOKEN_OSB)
 		{
 			lexer.nextToken ();
 			expr ();
-			if (lexer.lastToken () != TOKEN_CPAR1)
+			if (lexer.lastToken () != TOKEN_CSB)
 				throw new InvalidExpressionError ("Expected ]. Got '"+lexer.lastToken()+"' instead.");
 			lexer.nextToken ();
 		}

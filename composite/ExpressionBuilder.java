@@ -4,21 +4,21 @@ public class ExpressionBuilder
 {
 	public static enum OperatorType
 	{
-		OPERATOR_EQ,
-		OPERATOR_NEQ,
-		OPERATOR_GT,
-		OPERATOR_GE,
-		OPERATOR_LT,
-		OPERATOR_LE,
-		OPERATOR_POWER,
-		OPERATOR_DIV,
-		OPERATOR_REM,
-		OPERATOR_MULT,
-		OPERATOR_MINUS,
-		OPERATOR_PLUS,
-		OPERATOR_AND,
-		OPERATOR_OR,
-		OPERATOR_NOT,
+		OP_EQ,
+		OP_NE,
+		OP_GT,
+		OP_GE,
+		OP_LT,
+		OP_LE,
+		OP_POW,
+		OP_DIV,
+		OP_MOD,
+		OP_MUL,
+		OP_SUB,
+		OP_ADD,
+		OP_AND,
+		OP_OR,
+		OP_NOT,
 	}
 
 	private Expression root;
@@ -33,35 +33,35 @@ public class ExpressionBuilder
 	{
 		switch (operatorType)
 		{
-		case OPERATOR_EQ:
+		case OP_EQ:
 			return new RelationalOperator.Eq ();
-		case OPERATOR_NEQ:
+		case OP_NE:
 			return new RelationalOperator.Neq ();
-		case OPERATOR_GT:
+		case OP_GT:
 			return new RelationalOperator.Gt ();
-		case OPERATOR_GE:
+		case OP_GE:
 			return new RelationalOperator.Ge ();
-		case OPERATOR_LT:
+		case OP_LT:
 			return new RelationalOperator.Lt ();
-		case OPERATOR_LE:
+		case OP_LE:
 			return new RelationalOperator.Le ();
-		case OPERATOR_POWER:
+		case OP_POW:
 			return new ArithmeticOperator.Power ();
-		case OPERATOR_DIV:
+		case OP_DIV:
 			return new ArithmeticOperator.Div ();
-		case OPERATOR_REM:
+		case OP_MOD:
 			return new ArithmeticOperator.Rem ();
-		case OPERATOR_MULT:
+		case OP_MUL:
 			return new ArithmeticOperator.Mult ();
-		case OPERATOR_PLUS:
+		case OP_ADD:
 			return new ArithmeticOperator.Plus ();
-		case OPERATOR_MINUS:
+		case OP_SUB:
 			return new ArithmeticOperator.Minus ();
-		case OPERATOR_AND:
+		case OP_AND:
 			return new LogicalOperator.And ();
-		case OPERATOR_OR:
+		case OP_OR:
 			return new LogicalOperator.Or ();
-		case OPERATOR_NOT:
+		case OP_NOT:
 			return new LogicalOperator.Not ();
 		default:
 			assert false;

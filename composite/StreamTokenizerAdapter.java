@@ -1,7 +1,7 @@
 package ecv.composite;
 import static ecv.composite.Lexer.TokenType.TOKEN_AND;
 import static ecv.composite.Lexer.TokenType.TOKEN_CPAR;
-import static ecv.composite.Lexer.TokenType.TOKEN_CPAR1;
+import static ecv.composite.Lexer.TokenType.TOKEN_CSB;
 import static ecv.composite.Lexer.TokenType.TOKEN_DIV;
 import static ecv.composite.Lexer.TokenType.TOKEN_EOF;
 import static ecv.composite.Lexer.TokenType.TOKEN_EQ;
@@ -10,17 +10,17 @@ import static ecv.composite.Lexer.TokenType.TOKEN_GT;
 import static ecv.composite.Lexer.TokenType.TOKEN_ID;
 import static ecv.composite.Lexer.TokenType.TOKEN_LE;
 import static ecv.composite.Lexer.TokenType.TOKEN_LT;
-import static ecv.composite.Lexer.TokenType.TOKEN_MINUS;
-import static ecv.composite.Lexer.TokenType.TOKEN_MULT;
-import static ecv.composite.Lexer.TokenType.TOKEN_NEQ;
+import static ecv.composite.Lexer.TokenType.TOKEN_SUB;
+import static ecv.composite.Lexer.TokenType.TOKEN_MUL;
+import static ecv.composite.Lexer.TokenType.TOKEN_NE;
 import static ecv.composite.Lexer.TokenType.TOKEN_NOT;
 import static ecv.composite.Lexer.TokenType.TOKEN_NUM;
 import static ecv.composite.Lexer.TokenType.TOKEN_OPAR;
-import static ecv.composite.Lexer.TokenType.TOKEN_OPAR1;
+import static ecv.composite.Lexer.TokenType.TOKEN_OSB;
 import static ecv.composite.Lexer.TokenType.TOKEN_OR;
-import static ecv.composite.Lexer.TokenType.TOKEN_PLUS;
-import static ecv.composite.Lexer.TokenType.TOKEN_POWER;
-import static ecv.composite.Lexer.TokenType.TOKEN_REM;
+import static ecv.composite.Lexer.TokenType.TOKEN_ADD;
+import static ecv.composite.Lexer.TokenType.TOKEN_POW;
+import static ecv.composite.Lexer.TokenType.TOKEN_MOD;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
@@ -90,10 +90,10 @@ public class StreamTokenizerAdapter implements Lexer
 			lastToken = TOKEN_CPAR;
 			break;
 		case '[':
-			lastToken = TOKEN_OPAR1;
+			lastToken = TOKEN_OSB;
 			break;
 		case ']':
-			lastToken = TOKEN_CPAR1;
+			lastToken = TOKEN_CSB;
 			break;
 		case '=':
 			if (streamTokenizer.nextToken () != '=')
@@ -107,7 +107,7 @@ public class StreamTokenizerAdapter implements Lexer
 				lastToken = TOKEN_NOT;
 			}
 			else
-				lastToken = TOKEN_NEQ;
+				lastToken = TOKEN_NE;
 			break;
 		case '>':
 			if (streamTokenizer.nextToken () != '=')
@@ -128,22 +128,22 @@ public class StreamTokenizerAdapter implements Lexer
 				lastToken = TOKEN_LE;
 			break;
 		case '^':
-			lastToken = TOKEN_POWER;
+			lastToken = TOKEN_POW;
 			break;
 		case '/':
 			lastToken = TOKEN_DIV;
 			break;
 		case '%':
-			lastToken = TOKEN_REM;
+			lastToken = TOKEN_MOD;
 			break;
 		case '*':
-			lastToken = TOKEN_MULT;
+			lastToken = TOKEN_MUL;
 			break;
 		case '-':
-			lastToken = TOKEN_MINUS;
+			lastToken = TOKEN_SUB;
 			break;
 		case '+':
-			lastToken = TOKEN_PLUS;
+			lastToken = TOKEN_ADD;
 			break;
 		case '&':
 			if (streamTokenizer.nextToken () != '&')
