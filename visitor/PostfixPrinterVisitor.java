@@ -3,14 +3,14 @@ package ecv.visitor;
 import java.io.IOException;
 import java.io.Writer;
 
-import ecv.composite.ArithmeticOperator;
 import ecv.composite.Expression;
 import ecv.composite.Identifier;
-import ecv.composite.LogicalOperator;
-import ecv.composite.RelationalOperator;
 import ecv.composite.Visitor;
+import ecv.composite.Operator.ArithmeticOperator;
+import ecv.composite.Operator.LogicalOperator;
+import ecv.composite.Operator.RelationalOperator;
 
-public class PostfixPrinterVisitor implements Visitor
+public class PostfixPrinterVisitor extends Visitor
 {
 	private Writer writer;
 	private StringBuilder builder;
@@ -35,54 +35,47 @@ public class PostfixPrinterVisitor implements Visitor
 		logicalOperator.getLeft().accept (this);
 		if (logicalOperator.getRight() != null)
 			logicalOperator.getRight().accept (this);
-		if (logicalOperator instanceof LogicalOperator.And)
+		switch(logicalOperator.getType()) {
+		case OP_AND:
 			builder.append ("and ");
-		else if (logicalOperator instanceof LogicalOperator.Or)
+			break;
+		case OP_OR:
 			builder.append ("or ");
-		else if (logicalOperator instanceof LogicalOperator.Not)
+			break;
+		case OP_NOT:
 			builder.append ("not ");
-		else
-			assert false;
+		default: assert false;
+		}
 	}
 
 	public void visit (RelationalOperator relationalOperator)
 	{
 		relationalOperator.getLeft().accept (this);
 		relationalOperator.getRight().accept (this);
-		if (relationalOperator instanceof RelationalOperator.Eq)
-			builder.append ("== ");
-		else if (relationalOperator instanceof RelationalOperator.Neq)
-			builder.append ("!= ");
-		else if (relationalOperator instanceof RelationalOperator.Gt)
-			builder.append ("> ");
-		else if (relationalOperator instanceof RelationalOperator.Ge)
-			builder.append (">= ");
-		else if (relationalOperator instanceof RelationalOperator.Lt)
-			builder.append ("< ");
-		else if (relationalOperator instanceof RelationalOperator.Le)
-			builder.append ("<= ");
-		else
-			assert false;
+		switch(relationalOperator.getType()) {
+		case OP_EQ:	builder.append ("== "); break;
+		case OP_NE:	builder.append ("!= "); break;
+		case OP_GT:	builder.append ("> "); break;
+		case OP_GE:	builder.append (">= "); break;
+		case OP_LT:	builder.append ("< "); break;
+		case OP_LE:	builder.append ("<= "); break;
+		default:		assert false;
+		}
 	}
 
 	public void visit (ArithmeticOperator arithmeticOperator)
 	{
 		arithmeticOperator.getLeft().accept (this);
 		arithmeticOperator.getRight().accept (this);
-		if (arithmeticOperator instanceof ArithmeticOperator.Power)
-			builder.append ("^ ");
-		else if (arithmeticOperator instanceof ArithmeticOperator.Div)
-			builder.append ("/ ");
-		else if (arithmeticOperator instanceof ArithmeticOperator.Rem)
-			builder.append ("% ");
-		else if (arithmeticOperator instanceof ArithmeticOperator.Mult)
-			builder.append ("* ");
-		else if (arithmeticOperator instanceof ArithmeticOperator.Minus)
-			builder.append ("- ");
-		else if (arithmeticOperator instanceof ArithmeticOperator.Plus)
-			builder.append ("+ ");
-		else
-			assert false;
+		switch(arithmeticOperator.getType()) {
+		case OP_POW:	builder.append ("^ "); break;
+		case OP_DIV:	builder.append ("/ "); break;
+		case OP_MOD:	builder.append ("% "); break;
+		case OP_MUL:	builder.append ("* "); break;
+		case OP_ADD:	builder.append ("+ "); break;
+		case OP_SUB:	builder.append ("- "); break;
+		default: 		assert false;
+		}
 	}
 
 	public void print (Expression expression) throws IOException

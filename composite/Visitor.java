@@ -1,11 +1,29 @@
 package ecv.composite;
 
-public interface Visitor
+import ecv.composite.Operator.ArithmeticOperator;
+import ecv.composite.Operator.LogicalOperator;
+import ecv.composite.Operator.RelationalOperator;
+
+public abstract class Visitor
 {
-//	public void visit (Expression expression);
-	public void visit (Number number);
-	public void visit (Identifier identifier);
-	public void visit (ArithmeticOperator arithmeticOperator);
-	public void visit (LogicalOperator logicalOperator);
-	public void visit (RelationalOperator relationalOperator);
+	public abstract void visit (Number number);
+	public abstract void visit (Identifier identifier);
+	public abstract void visit (ArithmeticOperator arithmeticOperator);
+	public abstract void visit (LogicalOperator logicalOperator);
+	public abstract void visit (RelationalOperator relationalOperator);
+
+	public void visit (Expression expression) {
+		if(expression instanceof Number)
+			visit((Number)expression);
+		else if(expression instanceof Identifier)
+			visit((Identifier)expression);
+		else if(expression instanceof ArithmeticOperator)
+			visit((ArithmeticOperator)expression);
+		else if(expression instanceof LogicalOperator)
+			visit((LogicalOperator)expression);
+		else if(expression instanceof Operator.RelationalOperator)
+			visit((RelationalOperator)expression);
+		else
+			assert false;
+	};
 }

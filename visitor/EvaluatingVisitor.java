@@ -1,15 +1,13 @@
 package ecv.visitor;
 
-import ecv.composite.ArithmeticOperator;
 import ecv.composite.Expression;
 import ecv.composite.Identifier;
-import ecv.composite.LogicalOperator;
-import ecv.composite.RelationalOperator;
 import ecv.composite.Visitor;
+import ecv.composite.Operator.ArithmeticOperator;
+import ecv.composite.Operator.LogicalOperator;
+import ecv.composite.Operator.RelationalOperator;
 
-
-
-public class EvaluatingVisitor implements Visitor
+public class EvaluatingVisitor extends Visitor
 {
 	private Context context;
 	private boolean boolValue;
@@ -34,20 +32,23 @@ public class EvaluatingVisitor implements Visitor
 	{
 		logicalOperator.getLeft().accept (this);
 		boolean leftValue = boolValue;
-		if (logicalOperator instanceof LogicalOperator.Not)
-			boolValue = !leftValue;
-		else if (logicalOperator instanceof LogicalOperator.And)
+		switch(logicalOperator.getType()) {
+		case OP_AND:
 			if (!leftValue) // Corto circuito and
 				boolValue = false;
 			else
 				logicalOperator.getRight().accept (this);
-		else if (logicalOperator instanceof LogicalOperator.Or)
+			break;
+		case OP_OR:
 			if (leftValue) // Corto circuito or
 				boolValue = true;
 			else
 				logicalOperator.getRight().accept (this);
-		else
-			assert false;
+			break;
+		case OP_NOT:
+			boolValue = !leftValue;
+		default: assert false;
+		}
 	}
 
 	public void visit (RelationalOperator relationalOperator)
@@ -56,20 +57,15 @@ public class EvaluatingVisitor implements Visitor
 		int leftValue = intValue;
 		relationalOperator.getRight().accept (this);
 		int rightValue = intValue;
-		if (relationalOperator instanceof RelationalOperator.Eq)
-			boolValue = leftValue == rightValue;
-		else if (relationalOperator instanceof RelationalOperator.Neq)
-			boolValue = leftValue != rightValue;
-		else if (relationalOperator instanceof RelationalOperator.Gt)
-			boolValue = leftValue > rightValue;
-		else if (relationalOperator instanceof RelationalOperator.Ge)
-			boolValue = leftValue >= rightValue;
-		else if (relationalOperator instanceof RelationalOperator.Lt)
-			boolValue = leftValue < rightValue;
-		else if (relationalOperator instanceof RelationalOperator.Le)
-			boolValue = leftValue <= rightValue;
-		else
-			assert false;
+		switch(relationalOperator.getType()) {
+		case OP_EQ:	boolValue = leftValue == rightValue; break;
+		case OP_NE:	boolValue = leftValue != rightValue; break;
+		case OP_GT:	boolValue = leftValue > rightValue; break;
+		case OP_GE:	boolValue = leftValue >= rightValue; break;
+		case OP_LT:	boolValue = leftValue < rightValue; break;
+		case OP_LE:	boolValue = leftValue <= rightValue; break;
+		default:		assert false;
+		}
 	}
 
 	public void visit (ArithmeticOperator arithmeticOperator)
@@ -78,20 +74,15 @@ public class EvaluatingVisitor implements Visitor
 		int leftValue = intValue;
 		arithmeticOperator.getRight().accept (this);
 		int rightValue = intValue;
-		if (arithmeticOperator instanceof ArithmeticOperator.Power)
-			intValue = (int)Math.pow (leftValue, rightValue);
-		else if (arithmeticOperator instanceof ArithmeticOperator.Div)
-			intValue = leftValue / rightValue;
-		else if (arithmeticOperator instanceof ArithmeticOperator.Rem)
-			intValue = leftValue % rightValue;
-		else if (arithmeticOperator instanceof ArithmeticOperator.Mult)
-			intValue = leftValue * rightValue;
-		else if (arithmeticOperator instanceof ArithmeticOperator.Minus)
-			intValue = leftValue - rightValue;
-		else if (arithmeticOperator instanceof ArithmeticOperator.Plus)
-			intValue = leftValue + rightValue;
-		else
-			assert false;
+		switch(arithmeticOperator.getType()) {
+		case OP_POW:	intValue = (int)Math.pow (leftValue, rightValue); break;
+		case OP_DIV:	intValue = leftValue / rightValue; break;
+		case OP_MOD:	intValue = leftValue % rightValue; break;
+		case OP_MUL:	intValue = leftValue * rightValue; break;
+		case OP_ADD:	intValue = leftValue + rightValue; break;
+		case OP_SUB:	intValue = leftValue - rightValue; break;
+		default: 		assert false;
+		}
 	}
 
 	public boolean valueOf (Expression expression)

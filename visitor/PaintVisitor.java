@@ -8,12 +8,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import ecv.composite.ArithmeticOperator;
 import ecv.composite.Expression;
 import ecv.composite.Identifier;
-import ecv.composite.LogicalOperator;
 import ecv.composite.Operator;
-import ecv.composite.RelationalOperator;
 import ecv.composite.Visitor;
 
 class Bounds
@@ -22,7 +19,7 @@ class Bounds
 	int right;
 }
 
-class BoundsVisitor implements Visitor
+class BoundsVisitor extends Visitor
 {
 	private int bottom;
 	private ArrayList<Bounds> bounds = new ArrayList<Bounds>();
@@ -73,23 +70,23 @@ class BoundsVisitor implements Visitor
 		bottom = 1;
 	}
 
-	public void visit (LogicalOperator logicalOperator)
+	public void visit (Operator.LogicalOperator logicalOperator)
 	{
 		visitOperator (logicalOperator);
 	}
 
-	public void visit (RelationalOperator relationalOperator)
+	public void visit (Operator.RelationalOperator relationalOperator)
 	{
 		visitOperator (relationalOperator);
 	}
 
-	public void visit (ArithmeticOperator arithmeticOperator)
+	public void visit (Operator.ArithmeticOperator arithmeticOperator)
 	{
 		visitOperator (arithmeticOperator);
 	}
 }
 
-public class PaintVisitor implements Visitor
+public class PaintVisitor extends Visitor
 {
 	static final int BOX_WIDTH = 50;
 	static final int BOX_HEIGHT = 20;
@@ -133,45 +130,42 @@ public class PaintVisitor implements Visitor
 		}
 	}
 
-	public void visit (LogicalOperator logicalOperator)
+	public void visit (Operator.LogicalOperator logicalOperator)
 	{
 		paintChildren (logicalOperator);
 
 		String text = "";
-		if (logicalOperator instanceof LogicalOperator.Not)
-			text = "!";
-		else if (logicalOperator instanceof LogicalOperator.And)
+		switch(logicalOperator.getType()) {
+		case OP_AND:
 			text = "&&";
-		else if (logicalOperator instanceof LogicalOperator.Or)
+			break;
+		case OP_OR:
 			text = "||";
-		else
-			assert false;
+			break;
+		case OP_NOT:
+			text = "!";
+		default: assert false;
+		}
 
 		g.setColor (new Color (0x729fcf));
 		g.fill3DRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, true);    
 		drawString (text);
 	}
 
-	public void visit (RelationalOperator relationalOperator)
+	public void visit (Operator.RelationalOperator relationalOperator)
 	{
 		paintChildren (relationalOperator);
 
-		String text = "";
-		if (relationalOperator instanceof RelationalOperator.Eq)
-			text = "==";
-		else if (relationalOperator instanceof RelationalOperator.Neq)
-			text = "!=";
-		else if (relationalOperator instanceof RelationalOperator.Gt)
-			text = ">";
-		else if (relationalOperator instanceof RelationalOperator.Ge)
-			text = ">=";
-		else if (relationalOperator instanceof RelationalOperator.Lt)
-			text = "<";
-		else if (relationalOperator instanceof RelationalOperator.Le)
-			text = "<=";
-		else
-			assert false;
-
+		String text = null;
+		switch(relationalOperator.getType()) {
+		case OP_EQ:	text = "=="; break;
+		case OP_NE:	text = "!="; break;
+		case OP_GT:	text = ">"; break;
+		case OP_GE:	text = ">="; break;
+		case OP_LT:	text = "<"; break;
+		case OP_LE:	text = "<="; break;
+		default:		assert false;
+		}
 		g.setColor (new Color (0x8ae234));
 		g.fillRoundRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, 10, 10);
 		drawString (text);
@@ -184,25 +178,20 @@ public class PaintVisitor implements Visitor
 		g.drawString (text, (int)-bounds.getWidth()/2, (int)bounds.getHeight()/2 + BOX_HEIGHT/2 - g.getFontMetrics().getDescent());
 	}
 
-	public void visit (ArithmeticOperator arithmeticOperator)
+	public void visit (Operator.ArithmeticOperator arithmeticOperator)
 	{
 		paintChildren (arithmeticOperator);
 
-		String text = "";
-		if (arithmeticOperator instanceof ArithmeticOperator.Power)
-			text = "^";
-		else if (arithmeticOperator instanceof ArithmeticOperator.Div)
-			text = "/";
-		else if (arithmeticOperator instanceof ArithmeticOperator.Rem)
-			text = "%";
-		else if (arithmeticOperator instanceof ArithmeticOperator.Mult)
-			text = "*";
-		else if (arithmeticOperator instanceof ArithmeticOperator.Minus)
-			text = "-";
-		else if (arithmeticOperator instanceof ArithmeticOperator.Plus)
-			text = "+";
-		else
-			assert false;
+		String text = null;
+		switch(arithmeticOperator.getType()) {
+		case OP_POW:	text = "^"; break;
+		case OP_DIV:	text = "/"; break;
+		case OP_MOD:	text = "%"; break;
+		case OP_MUL:	text = "*"; break;
+		case OP_ADD:	text = "+"; break;
+		case OP_SUB:	text = "-"; break;
+		default: 		assert false;
+		}
 
 		g.setColor (new Color (0xfcaf3e));
 		g.fillRoundRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, 10, 10);

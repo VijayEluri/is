@@ -34,39 +34,27 @@ public class ExpressionBuilder
 		switch (operatorType)
 		{
 		case OP_EQ:
-			return new RelationalOperator.Eq ();
 		case OP_NE:
-			return new RelationalOperator.Neq ();
 		case OP_GT:
-			return new RelationalOperator.Gt ();
 		case OP_GE:
-			return new RelationalOperator.Ge ();
 		case OP_LT:
-			return new RelationalOperator.Lt ();
 		case OP_LE:
-			return new RelationalOperator.Le ();
+			return new Operator.RelationalOperator(operatorType);
 		case OP_POW:
-			return new ArithmeticOperator.Power ();
 		case OP_DIV:
-			return new ArithmeticOperator.Div ();
 		case OP_MOD:
-			return new ArithmeticOperator.Rem ();
 		case OP_MUL:
-			return new ArithmeticOperator.Mult ();
 		case OP_ADD:
-			return new ArithmeticOperator.Plus ();
 		case OP_SUB:
-			return new ArithmeticOperator.Minus ();
+			return new Operator.ArithmeticOperator(operatorType);
 		case OP_AND:
-			return new LogicalOperator.And ();
 		case OP_OR:
-			return new LogicalOperator.Or ();
 		case OP_NOT:
-			return new LogicalOperator.Not ();
+			return new Operator.LogicalOperator(operatorType);
 		default:
 			assert false;
 			return null;
-		}   
+		}
 	}
 
 	public void buildOperator (OperatorType operatorType)
