@@ -1,4 +1,4 @@
-package ecv.visitor;
+package ecv;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,10 +8,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import ecv.composite.Expression;
-import ecv.composite.Identifier;
-import ecv.composite.Operator;
-import ecv.composite.Visitor;
 
 class Bounds
 {
@@ -52,7 +48,7 @@ class BoundsVisitor extends Visitor
 	public ArrayList<Bounds> getBounds () { return bounds; }
 	public int getBottom () { return bottom; }
 
-	public void visit (ecv.composite.Number number)
+	public void visit (Number number)
 	{
 		Bounds b = new Bounds ();
 		b.left = PaintVisitor.BOX_WIDTH/2;
@@ -97,7 +93,7 @@ public class PaintVisitor extends Visitor
 	private int bottom;
 	private int index;
 
-	public void visit (ecv.composite.Number number)
+	public void visit (Number number)
 	{
 		index++;
 		drawString (""+number.getValue ());

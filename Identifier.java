@@ -1,4 +1,4 @@
-package ecv.composite;
+package ecv;
 
 public class Identifier extends Expression
 {

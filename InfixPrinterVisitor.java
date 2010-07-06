@@ -1,14 +1,11 @@
-package ecv.visitor;
+package ecv;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import ecv.composite.Expression;
-import ecv.composite.Identifier;
-import ecv.composite.Visitor;
-import ecv.composite.Operator.ArithmeticOperator;
-import ecv.composite.Operator.LogicalOperator;
-import ecv.composite.Operator.RelationalOperator;
+import ecv.Operator.ArithmeticOperator;
+import ecv.Operator.LogicalOperator;
+import ecv.Operator.RelationalOperator;
 
 public class InfixPrinterVisitor extends Visitor
 {
@@ -21,7 +18,7 @@ public class InfixPrinterVisitor extends Visitor
 		this.writer = writer;
 	}
 
-	public void visit (ecv.composite.Number number)
+	public void visit (Number number)
 	{
 		builder.append (number.getValue ());
 	}

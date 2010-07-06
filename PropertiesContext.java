@@ -1,4 +1,4 @@
-package ecv.visitor;
+package ecv;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Set;
 
-import ecv.composite.StreamTokenizerAdapter;
+import ecv.StreamTokenizerAdapter;
 
 public class PropertiesContext implements Context
 {

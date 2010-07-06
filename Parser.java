@@ -1,11 +1,11 @@
-package ecv.composite;
+package ecv;
 
-import static ecv.composite.ExpressionBuilder.OperatorType.*;
-import static ecv.composite.StreamTokenizerAdapter.TokenType.*;
+import static ecv.ExpressionBuilder.OperatorType.*;
+import static ecv.StreamTokenizerAdapter.TokenType.*;
 
 import java.io.IOException;
 
-import ecv.composite.StreamTokenizerAdapter.TokenType;
+import ecv.StreamTokenizerAdapter.TokenType;
 
 public class Parser
 {

@@ -1,8 +1,8 @@
-package ecv.composite;
+package ecv;
 
-import ecv.composite.Operator.ArithmeticOperator;
-import ecv.composite.Operator.LogicalOperator;
-import ecv.composite.Operator.RelationalOperator;
+import ecv.Operator.ArithmeticOperator;
+import ecv.Operator.LogicalOperator;
+import ecv.Operator.RelationalOperator;
 
 public abstract class Visitor
 {

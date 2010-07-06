@@ -1,5 +1,5 @@
-package ecv.composite;
-import static ecv.composite.StreamTokenizerAdapter.TokenType.*;
+package ecv;
+import static ecv.StreamTokenizerAdapter.TokenType.*;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -1,4 +1,4 @@
-package ecv.composite;
+package ecv;
 
 /* Expression is our Composite type
  * it can be composed by more expressions

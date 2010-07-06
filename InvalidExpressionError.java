@@ -1,4 +1,4 @@
-package ecv.composite;
+package ecv;
 
 @SuppressWarnings ("serial")
 public class InvalidExpressionError extends RuntimeException

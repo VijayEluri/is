@@ -1,4 +1,4 @@
-package ecv.visitor;
+package ecv;
 
 import java.util.Set;
 
