@@ -1,4 +1,4 @@
-package ecv.gui;
+package ecv;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -11,14 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import ecv.composite.Expression;
-import ecv.composite.ExpressionBuilder;
-import ecv.composite.Parser;
-import ecv.composite.StreamTokenizerAdapter;
-import ecv.gui.Model.Change;
-import ecv.visitor.EvaluatingVisitor;
-import ecv.visitor.PropertiesContext;
 
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
