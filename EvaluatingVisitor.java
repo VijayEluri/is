@@ -44,6 +44,7 @@ public class EvaluatingVisitor extends Visitor
 			break;
 		case OP_NOT:
 			boolValue = !leftValue;
+			break;
 		default: assert false;
 		}
 	}

@@ -26,7 +26,7 @@ public class ExpressionBuilder
 	public Expression getResult ()
 	{
 		assert root != null && root instanceof Expression;
-		return (Expression)root;
+		return root;
 	}
 
 	private Operator createOperator (OperatorType operatorType)

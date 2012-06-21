@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 	private JPanel result = new JPanel();
-	private JComboBox choice = new JComboBox(new String[]{"Evaluation", "Infix Print", "Postfix print", "Graph"});
+	private JComboBox<String> choice = new JComboBox<String>(new String[]{"Evaluation", "Infix Print", "Postfix print", "Graph"});
 	private JTextArea expr = new JTextArea("", 3, 20);
 
 	public static void main(String args[]) {

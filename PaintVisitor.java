@@ -140,6 +140,7 @@ public class PaintVisitor extends Visitor
 			break;
 		case OP_NOT:
 			text = "!";
+			break;
 		default: assert false;
 		}
 

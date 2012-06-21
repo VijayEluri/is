@@ -41,6 +41,7 @@ public class PostfixPrinterVisitor extends Visitor
 			break;
 		case OP_NOT:
 			builder.append ("not ");
+			break;
 		default: assert false;
 		}
 	}

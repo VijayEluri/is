@@ -19,7 +19,7 @@ public class PropertiesContext implements Context
 	@SuppressWarnings("unchecked")
 	public void load (Properties properties)
 	{
-		for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
+		for (Enumeration<?> e = properties.propertyNames(); e.hasMoreElements();)
 		{
 			// Key validation
 			String key = (String)e.nextElement();
