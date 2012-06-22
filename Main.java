@@ -15,6 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import ecv.visitor.EvaluatingVisitor;
+import ecv.visitor.InfixPrinterVisitor;
+import ecv.visitor.PaintVisitor;
+import ecv.visitor.PostfixPrinterVisitor;
+
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 	private JPanel result = new JPanel();

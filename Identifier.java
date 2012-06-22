@@ -1,5 +1,7 @@
 package ecv;
 
+import ecv.visitor.Visitor;
+
 public class Identifier extends Expression
 {
 	private String name;

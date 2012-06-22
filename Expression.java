@@ -1,5 +1,7 @@
 package ecv;
 
+import ecv.visitor.Visitor;
+
 /* Expression is our Composite type
  * it can be composed by more expressions
  */

@@ -1,10 +1,10 @@
 JFLAGS := -g -Xlint
 
 all:
-	javac $(JFLAGS) *.java
+	javac $(JFLAGS) *.java visitor/*.java
 
 clean:
-	$(RM) *.class
+	$(RM) *.class visitor/*.class
 
 test: all
 	java -cp .. ecv.Main

@@ -1,4 +1,4 @@
-package ecv;
+package ecv.visitor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -7,6 +7,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import ecv.Expression;
+import ecv.Identifier;
+import ecv.Number;
+import ecv.Operator;
 
 
 class Bounds
