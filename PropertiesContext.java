@@ -16,7 +16,6 @@ public class PropertiesContext implements Context
 	/*
 	 * If duplicate entries are detected, old values are replaced with new values
 	 */
-	@SuppressWarnings("unchecked")
 	public void load (Properties properties)
 	{
 		for (Enumeration<?> e = properties.propertyNames(); e.hasMoreElements();)
