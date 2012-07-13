@@ -25,7 +25,7 @@ import ecv.visitor.PostfixPrinterVisitor;
 public class Main extends JFrame implements ActionListener {
 	private JPanel result = new JPanel();
 	private JComboBox<String> choice = new JComboBox<String>(new String[]{"Evaluation", "Infix Print", "Postfix print", "Graph"});
-	private JTextArea expr = new JTextArea("", 3, 20);
+	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / 100 / 5^5 != 3 + 10 - 6", 5, 30);
 
 	public static void main(String args[]) {
 		new Main();
