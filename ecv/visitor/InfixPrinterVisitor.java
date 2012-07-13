@@ -3,12 +3,12 @@ package ecv.visitor;
 import java.io.IOException;
 import java.io.Writer;
 
-import ecv.Expression;
-import ecv.Identifier;
-import ecv.Number;
-import ecv.Operator.ArithmeticOperator;
-import ecv.Operator.LogicalOperator;
-import ecv.Operator.RelationalOperator;
+import ecv.operator.Expression;
+import ecv.operator.Identifier;
+import ecv.operator.Number;
+import ecv.operator.Operator.ArithmeticOperator;
+import ecv.operator.Operator.LogicalOperator;
+import ecv.operator.Operator.RelationalOperator;
 
 public class InfixPrinterVisitor extends Visitor
 {

@@ -1,12 +1,12 @@
 package ecv.visitor;
 
-import ecv.Expression;
-import ecv.Identifier;
-import ecv.Number;
-import ecv.Operator;
-import ecv.Operator.ArithmeticOperator;
-import ecv.Operator.LogicalOperator;
-import ecv.Operator.RelationalOperator;
+import ecv.operator.Expression;
+import ecv.operator.Identifier;
+import ecv.operator.Number;
+import ecv.operator.Operator;
+import ecv.operator.Operator.ArithmeticOperator;
+import ecv.operator.Operator.LogicalOperator;
+import ecv.operator.Operator.RelationalOperator;
 
 public abstract class Visitor
 {

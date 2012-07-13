@@ -8,10 +8,10 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import ecv.Expression;
-import ecv.Identifier;
-import ecv.Number;
-import ecv.Operator;
+import ecv.operator.Expression;
+import ecv.operator.Identifier;
+import ecv.operator.Number;
+import ecv.operator.Operator;
 
 
 class Bounds

@@ -1,10 +1,6 @@
-package ecv;
+package ecv.operator;
 
 import ecv.visitor.Visitor;
-
-/* Expression is our Composite type
- * it can be composed by more expressions
- */
 
 public abstract class Expression
 {

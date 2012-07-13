@@ -3,11 +3,11 @@ package ecv.visitor;
 import java.io.IOException;
 import java.io.Writer;
 
-import ecv.Expression;
-import ecv.Identifier;
-import ecv.Operator.ArithmeticOperator;
-import ecv.Operator.LogicalOperator;
-import ecv.Operator.RelationalOperator;
+import ecv.operator.Expression;
+import ecv.operator.Identifier;
+import ecv.operator.Operator.ArithmeticOperator;
+import ecv.operator.Operator.LogicalOperator;
+import ecv.operator.Operator.RelationalOperator;
 
 public class PostfixPrinterVisitor extends Visitor
 {
@@ -19,7 +19,7 @@ public class PostfixPrinterVisitor extends Visitor
 		this.writer = writer;
 	}
 
-	public void visit (ecv.Number number)
+	public void visit (ecv.operator.Number number)
 	{
 		builder.append (number.getValue()+" ");
 	}

@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import ecv.operator.Expression;
 import ecv.visitor.EvaluatingVisitor;
 import ecv.visitor.InfixPrinterVisitor;
 import ecv.visitor.PaintVisitor;

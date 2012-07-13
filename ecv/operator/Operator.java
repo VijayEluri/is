@@ -1,4 +1,4 @@
-package ecv;
+package ecv.operator;
 
 import ecv.ExpressionBuilder.OperatorType;
 

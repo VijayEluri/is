@@ -13,9 +13,6 @@ public class PropertiesContext implements Context
 {
 	private Hashtable<String,Integer> context = new Hashtable<String,Integer>();
 
-	/*
-	 * If duplicate entries are detected, old values are replaced with new values
-	 */
 	public void load (Properties properties)
 	{
 		for (Enumeration<?> e = properties.propertyNames(); e.hasMoreElements();)
