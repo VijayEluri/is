@@ -113,7 +113,7 @@ public class Main extends JFrame implements DocumentListener {
 			evaluating.setText(null);
 			infix.setText(null);
 			postfix.setText(null);
-			graph.setIcon(null);			
+			graph.setIcon(null);
 		} else try {
 			PropertiesContext context = new PropertiesContext ();
 			ExpressionBuilder builder = new ExpressionBuilder();
