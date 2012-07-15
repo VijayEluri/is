@@ -150,7 +150,7 @@ public class PaintVisitor extends Visitor
 		}
 
 		g.setColor (new Color (0x729fcf));
-		g.fill3DRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, true);    
+		g.fill3DRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, true);
 		drawString (text);
 	}
 

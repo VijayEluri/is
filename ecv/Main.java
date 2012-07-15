@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -26,7 +27,7 @@ public class Main extends JFrame implements DocumentListener {
 	private ImageIcon ok = new ImageIcon("ok.png");
 	private ImageIcon fail = new ImageIcon("fail.png");
 	private JLabel valid = new JLabel(ok);
-	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / 100 / 5^5 != 3 + 10 - 6", 5, 30);
+	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / [100 / 25] != 3 + 10 - 6", 5, 30);
 
 	// visitors
 	private JLabel evaluating = new JLabel();
@@ -57,29 +58,45 @@ public class Main extends JFrame implements DocumentListener {
 
 		add(err, c);
 
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(new JSeparator(), c);
+
 		// Evaluating visitor
+		c.ipady = 5;
 		c.anchor = GridBagConstraints.CENTER;
 		c.gridwidth = 1;
 		add(new JLabel("Evaluating visitor:"), c);
-		c.gridwidth = GridBagConstraints.REMAINDER;
 
+		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(evaluating, c);
+
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		add(evaluating, c);
+
+		add(new JSeparator(), c);
 
 		// Infix visitor
 		c.gridwidth = 1;
 		add(new JLabel("Infix visitor:"), c);
+
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(infix, c);
+
+		add(new JSeparator(), c);
 
 		// Postfix visitor
 		c.gridwidth = 1;
 		add(new JLabel("Postfix visitor:"), c);
+
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(postfix, c);
+
+		add(new JSeparator(), c);
 
 		// Graph visitor
 		c.gridwidth = 1;
 		add(new JLabel("Graph visitor:"), c);
+
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(graph, c);
 
