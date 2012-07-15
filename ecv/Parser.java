@@ -53,7 +53,7 @@ public class Parser
 	@SuppressWarnings("unused")
 	private static boolean isClosing (TokenType token)
 	{
-		return token == TOKEN_CPAR || token == TOKEN_CSB || token == TOKEN_EOF;
+		return token == TOKEN_CSB || token == TOKEN_EOF;
 	}
 
 	@SuppressWarnings("unused")
@@ -67,7 +67,6 @@ public class Parser
 		switch (sta.lastToken ())
 		{
 		case TOKEN_NOT:
-		case TOKEN_OPAR:
 		case TOKEN_ADD:
 		case TOKEN_SUB:
 		case TOKEN_ID:
@@ -77,7 +76,7 @@ public class Parser
 			cond1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -98,7 +97,6 @@ public class Parser
 		switch (sta.lastToken ())
 		{
 		case TOKEN_NOT:
-		case TOKEN_OPAR:
 		case TOKEN_ADD:
 		case TOKEN_SUB:
 		case TOKEN_ID:
@@ -108,7 +106,7 @@ public class Parser
 			termb1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [ +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -132,13 +130,6 @@ public class Parser
 			sta.nextTokenType ();
 			factb ();
 			builder.buildOperator (OP_NOT);
-			break;
-		case TOKEN_OPAR:
-			sta.nextTokenType ();
-			cond ();
-			if (sta.lastToken () != TOKEN_CPAR)
-				throw new InvalidExpressionError ("Expected ). Got '"+sta.lastToken()+"' instead.");
-			sta.nextTokenType ();
 			break;
 		case TOKEN_ADD:
 		case TOKEN_SUB:
@@ -174,7 +165,7 @@ public class Parser
 			builder.endOperator ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected not (!), (, [, +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected not (!), (, +, -, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -203,7 +194,7 @@ public class Parser
 			expr1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number with sign or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected (, a number with sign or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -232,7 +223,7 @@ public class Parser
 			term1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected (, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -263,7 +254,7 @@ public class Parser
 			termp1 ();
 			break;
 		default:
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected (, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 		}
 	}
 
@@ -300,6 +291,6 @@ public class Parser
 			sta.nextTokenType ();
 		}
 		else
-			throw new InvalidExpressionError ("Expected [, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
+			throw new InvalidExpressionError ("Expected (, a number or an identifier. Got '"+sta.lastToken()+"' instead.");
 	}
 }

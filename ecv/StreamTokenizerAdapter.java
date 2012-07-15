@@ -15,25 +15,23 @@ public class StreamTokenizerAdapter extends StreamTokenizer
 		TOKEN_EOF ("end of file"),
 		TOKEN_ID ("identifier"), // ("A" | ... | "Z" | "a" | ...| "z") [("A"| ... | "Z" | "a" | ...| "z" | "0" | ... | "9")]*
 		TOKEN_NUM ("number"), // ("0" | ... | "9") [("0" | ... | "9")]*
-		TOKEN_OPAR ("("), // "("
-		TOKEN_CPAR (")"), // ")"
-		TOKEN_OSB ("["), // "["
-		TOKEN_CSB ("]"), // "]"
-		TOKEN_EQ ("=="), // "=="
-		TOKEN_NE ("!="), // "!="
-		TOKEN_GT (">"), // ">"
-		TOKEN_GE (">="), // ">="
-		TOKEN_LT ("<"), // "<"
-		TOKEN_LE ("<="), // "<="
-		TOKEN_POW ("^"), // "^"
-		TOKEN_DIV ("/"), // "/"
-		TOKEN_MOD ("%"), // "%"
-		TOKEN_MUL ("*"), // "*"
-		TOKEN_SUB ("-"), // "-"
-		TOKEN_ADD ("+"), // "+"
-		TOKEN_AND ("and (&&)"), // "and" o "&&"
-		TOKEN_OR ("or (||)"), // "or" o "||"
-		TOKEN_NOT ("not (!)"); // "not" o "!"
+		TOKEN_OSB ("("),
+		TOKEN_CSB (")"),
+		TOKEN_EQ ("=="),
+		TOKEN_NE ("!="),
+		TOKEN_GT (">"),
+		TOKEN_GE (">="),
+		TOKEN_LT ("<"),
+		TOKEN_LE ("<="),
+		TOKEN_POW ("^"),
+		TOKEN_DIV ("/"),
+		TOKEN_MOD ("%"),
+		TOKEN_MUL ("*"),
+		TOKEN_SUB ("-"),
+		TOKEN_ADD ("+"),
+		TOKEN_AND ("and (&&)"),
+		TOKEN_OR ("or (||)"),
+		TOKEN_NOT ("not (!)");
 
 		private final String name;
 		private TokenType (String name)
@@ -61,8 +59,6 @@ public class StreamTokenizerAdapter extends StreamTokenizer
 		parseNumbers ();
 		ordinaryChar ('(');
 		ordinaryChar (')');
-		ordinaryChar ('[');
-		ordinaryChar (']');
 		ordinaryChar ('!');
 		ordinaryChar ('=');
 		ordinaryChar ('<');
@@ -101,15 +97,9 @@ public class StreamTokenizerAdapter extends StreamTokenizer
 			break;
 
 		case '(':
-			lastToken = TOKEN_OPAR;
-			break;
-		case ')':
-			lastToken = TOKEN_CPAR;
-			break;
-		case '[':
 			lastToken = TOKEN_OSB;
 			break;
-		case ']':
+		case ')':
 			lastToken = TOKEN_CSB;
 			break;
 		case '=':

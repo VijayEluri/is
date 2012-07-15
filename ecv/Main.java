@@ -27,7 +27,7 @@ public class Main extends JFrame implements DocumentListener {
 	private ImageIcon ok = new ImageIcon("ok.png");
 	private ImageIcon fail = new ImageIcon("fail.png");
 	private JLabel valid = new JLabel(ok);
-	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / [100 / 25] != 3 + 10 - 6", 5, 30);
+	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / (100 / 25) != 3 + 10 - 6", 5, 30);
 
 	// visitors
 	private JLabel evaluating = new JLabel();
