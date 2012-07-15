@@ -1,9 +1,5 @@
-package ecv;
+package ecv.operator;
 
-import ecv.operator.Expression;
-import ecv.operator.Identifier;
-import ecv.operator.Number;
-import ecv.operator.Operator;
 
 public class ExpressionBuilder
 {

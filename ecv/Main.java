@@ -1,23 +1,20 @@
 package ecv;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import ecv.operator.Expression;
+import ecv.operator.ExpressionBuilder;
 import ecv.visitor.EvaluatingVisitor;
 import ecv.visitor.InfixPrinterVisitor;
 import ecv.visitor.PaintVisitor;
@@ -49,30 +46,38 @@ public class Main extends JFrame implements DocumentListener {
 		setLayout(new GridBagLayout());
 		expr.getDocument().addDocumentListener(this);
 
+		// Input and status controls
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridheight = 2;
 		add(expr, c);
 
+		c.gridheight = 1;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(valid, c);
 
 		add(err, c);
 
+		// Evaluating visitor
+		c.anchor = GridBagConstraints.CENTER;
 		c.gridwidth = 1;
 		add(new JLabel("Evaluating visitor:"), c);
 		c.gridwidth = GridBagConstraints.REMAINDER;
 
-		add(Box.createRigidArea(new Dimension(100, 5)), c);
 		add(evaluating, c);
 
+		// Infix visitor
 		c.gridwidth = 1;
 		add(new JLabel("Infix visitor:"), c);
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(infix, c);
 
+		// Postfix visitor
 		c.gridwidth = 1;
-		add(new JLabel("Postfiv visitor:"), c);
+		add(new JLabel("Postfix visitor:"), c);
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(postfix, c);
 
+		// Graph visitor
 		c.gridwidth = 1;
 		add(new JLabel("Graph visitor:"), c);
 		c.gridwidth = GridBagConstraints.REMAINDER;
@@ -94,22 +99,24 @@ public class Main extends JFrame implements DocumentListener {
 			graph.setIcon(null);			
 		} else try {
 			PropertiesContext context = new PropertiesContext ();
-			Expression expression = parse(expr.getText());
+			ExpressionBuilder builder = new ExpressionBuilder();
+			new Parser(new StreamTokenizerAdapter(new StringReader(expr.getText())), builder).parse();
+			Expression expression = builder.getResult();
 
 			evaluating.setText("" + new EvaluatingVisitor(context).valueOf(expression));
 
-			StringWriter iwriter = new StringWriter();
-			new InfixPrinterVisitor(iwriter).print(expression);
-			infix.setText(iwriter.toString());
+			StringWriter writer = new StringWriter();
+			new InfixPrinterVisitor(writer).print(expression);
+			infix.setText(writer.toString());
 
-			StringWriter pwriter = new StringWriter();
-			new PostfixPrinterVisitor(pwriter).print(expression);
-			postfix.setText("" + pwriter.toString());
+			writer = new StringWriter();
+			new PostfixPrinterVisitor(writer).print(expression);
+			postfix.setText("" + writer.toString());
 
 			graph.setIcon(new ImageIcon(new PaintVisitor().createImage(expression)));
 
 			valid.setIcon(ok);
-			err.setText(null);
+			err.setText("Valid expression");
 		} catch (InvalidExpressionError iee) {
 			valid.setIcon(fail);
 			err.setText(iee.getMessage());
@@ -123,13 +130,6 @@ public class Main extends JFrame implements DocumentListener {
 			e.printStackTrace();
 		}
 		pack();
-	}
-
-	private Expression parse(String expression) throws IOException
-	{
-		ExpressionBuilder builder = new ExpressionBuilder();
-		new Parser(new StreamTokenizerAdapter(new StringReader(expression)), builder).parse();
-		return builder.getResult();
 	}
 
 	@Override

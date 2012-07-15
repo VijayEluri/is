@@ -1,6 +1,6 @@
 package ecv.operator;
 
-import ecv.ExpressionBuilder.OperatorType;
+import ecv.operator.ExpressionBuilder.OperatorType;
 
 public abstract class Operator extends Expression
 {
