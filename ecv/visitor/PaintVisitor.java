@@ -98,6 +98,10 @@ public class PaintVisitor extends Visitor
 	private int bottom;
 	private int index;
 
+	private static final Color logicalColor =  new Color (0xff7f7f);
+	private static final Color relColor =  new Color (0x7fff7f);
+	private static final Color mathColor =  new Color (0x7f7fff);
+
 	public void visit (Number number)
 	{
 		index++;
@@ -149,8 +153,8 @@ public class PaintVisitor extends Visitor
 		default: assert false;
 		}
 
-		g.setColor (new Color (0x729fcf));
-		g.fill3DRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, true);
+		g.setColor (logicalColor);
+		g.fillRoundRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, 10, 10);
 		drawString (text);
 	}
 
@@ -168,7 +172,7 @@ public class PaintVisitor extends Visitor
 		case OP_LE:	text = "<="; break;
 		default:		assert false;
 		}
-		g.setColor (new Color (0x8ae234));
+		g.setColor (relColor);
 		g.fillRoundRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, 10, 10);
 		drawString (text);
 	}
@@ -195,7 +199,7 @@ public class PaintVisitor extends Visitor
 		default: 		assert false;
 		}
 
-		g.setColor (new Color (0xfcaf3e));
+		g.setColor (mathColor);
 		g.fillRoundRect (-BOX_WIDTH/3, 0, BOX_WIDTH/3*2, BOX_HEIGHT, 10, 10);
 		drawString (text);
 	}

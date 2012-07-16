@@ -102,6 +102,8 @@ public class Main extends JFrame implements DocumentListener {
 
 		pack();
 		setVisible(true);
+		expr.requestFocusInWindow();
+		expr.setCaretPosition(expr.getDocument().getLength());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
