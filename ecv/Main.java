@@ -2,6 +2,7 @@ package ecv;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -24,8 +25,8 @@ import ecv.visitor.PostfixPrinterVisitor;
 @SuppressWarnings("serial")
 public class Main extends JFrame implements DocumentListener {
 	private JLabel err = new JLabel();
-	private ImageIcon ok = new ImageIcon("ok.png");
-	private ImageIcon fail = new ImageIcon("fail.png");
+	private ImageIcon ok = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("ok.png")));
+	private ImageIcon fail = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("fail.png")));
 	private JLabel valid = new JLabel(ok);
 	private JTextArea expr = new JTextArea("6 + 2^2 > 25 / 5 && 24 / [100 / 25] != 3 + 10 - 6", 5, 30);
 
