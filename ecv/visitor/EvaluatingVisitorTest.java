@@ -6,7 +6,6 @@ import java.io.StringReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import ecv.InvalidExpressionError;
 import ecv.Parser;
 import ecv.PropertiesContext;
 import ecv.StreamTokenizerAdapter;
@@ -31,10 +30,5 @@ public class EvaluatingVisitorTest {
 	@Test
 	public void testFalse() throws IOException {
 		Assert.assertFalse(evaluate("10 == 4"));
-	}
-
-	@Test(expected=InvalidExpressionError.class)
-	public void testInvalid() throws IOException {
-		evaluate("10 == (");
 	}
 }
