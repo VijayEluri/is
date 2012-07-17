@@ -1,10 +1,13 @@
-package ecv;
+package ecv.test;
 
 import java.io.IOException;
 import java.io.StringReader;
 
 import org.junit.Test;
 
+import ecv.InvalidExpressionError;
+import ecv.Parser;
+import ecv.StreamTokenizerAdapter;
 import ecv.operator.ExpressionBuilder;
 
 public class ParserTest {
